@@ -3,13 +3,20 @@
 #include <math.h>
 #include <stddef.h>
 
-#include "stm32f1xx.h"
-
-extern TIM_HandleTypeDef TIM_Handle;
-
 PE_Servo180_Status_t PE_Servo180_attachMotor(PE_Servo180_Timer_t *timer, PE_Servo180_Motor_t *motor) {
-    if (timer->motorCount == PE_Servo180_MOTOR_PER_TIMER || motor->attached) {
+    if (motor == NULL) {
         return PE_Servo180_FAILURE;
+    }
+
+    if (timer->motorCount == PE_Servo180_MOTOR_PER_TIMER) {
+        return PE_Servo180_FAILURE;
+    }
+
+    uint8_t index;
+    for (index = 0; index < timer->motorCount; index++) {
+        if (timer->motorItems[index] == motor) {
+            return PE_Servo180_SUCCESS;
+        }
     }
 
     if (motor->min == 0) {
@@ -20,7 +27,7 @@ PE_Servo180_Status_t PE_Servo180_attachMotor(PE_Servo180_Timer_t *timer, PE_Serv
         motor->max = PE_Servo180_MOTOR_MAX;
     }
 
-    motor->attached = 1;
+    motor->ticks = PE_Servo180_MOTOR_MID;
 
     timer->motorItems[timer->motorCount] = motor;
     timer->motorCount++;
@@ -29,6 +36,10 @@ PE_Servo180_Status_t PE_Servo180_attachMotor(PE_Servo180_Timer_t *timer, PE_Serv
 }
 
 PE_Servo180_Status_t PE_Servo180_detachMotor(PE_Servo180_Timer_t *timer, PE_Servo180_Motor_t *motor) {
+    if (motor == NULL) {
+        return PE_Servo180_FAILURE;
+    }
+
     uint8_t index;
 
     for (index = 0; index < timer->motorCount; index++) {

@@ -10,15 +10,14 @@ extern "C" {
 #define PE_Servo180_REFRESH_INTERVAL 20000
 #define PE_Servo180_MOTOR_PER_TIMER 8
 #define PE_Servo180_MOTOR_MIN 500
+#define PE_Servo180_MOTOR_MID 1500
 #define PE_Servo180_MOTOR_MAX 2500
 
 typedef struct PE_Servo180_Motor_s {
-    uint8_t attached: 1;
-    uint8_t ID: 7;// public
-    uint16_t ticks;// private
-    uint16_t value;// private
-    uint16_t min;// public
-    uint16_t max;// public
+    uint8_t ID;
+    uint16_t ticks;
+    uint16_t min;
+    uint16_t max;
 } PE_Servo180_Motor_t;
 
 typedef PE_Servo180_Motor_t *PE_Servo180_Motor_p;

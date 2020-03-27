@@ -12,9 +12,11 @@ TIM_HandleTypeDef TIM_Handle;
 
 PE_Servo180_Timer_t timer1;
 PE_Servo180_Motor_t motor1 = {.ID = 0};
+PE_Servo180_Motor_t motor2 = {.ID = 1};
 
 Motor_Pin_t motorPins[] = {
     {GPIOA, 0},
+    {GPIOA, 1},
 };
 
 void SystemClock_Config(void);
@@ -30,6 +32,7 @@ int main()
     MX_TIM_PWM_Init(TIM4, &TIM_Handle);
 
     PE_Servo180_attachMotor(&timer1, &motor1);
+    PE_Servo180_attachMotor(&timer1, &motor2);
 
     PE_Servo180_setDegree(&motor1, 90);
 
@@ -60,6 +63,7 @@ int main()
             deg += diff;
 
             PE_Servo180_setDegree(&motor1, deg);
+            PE_Servo180_setDegree(&motor2, 180 - deg);
         }
         //MX_LED_ON(0);
         //HAL_Delay(500);
@@ -113,7 +117,7 @@ void MX_GPIO_Init() {
     __HAL_RCC_GPIOC_CLK_ENABLE();
 
     /* GPIO Configuration */
-    GPIO_InitStruct.Pin   = GPIO_PIN_0;
+    GPIO_InitStruct.Pin   = GPIO_PIN_0|GPIO_PIN_1;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 
