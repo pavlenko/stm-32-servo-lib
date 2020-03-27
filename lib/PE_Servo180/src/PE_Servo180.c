@@ -3,6 +3,8 @@
 #include <math.h>
 #include <stddef.h>
 
+float PE_Servo180_mapRange(float value, float srcMin, float srcMax, float dstMin, float dstMax);
+
 PE_Servo180_Status_t PE_Servo180_createTimer(PE_Servo180_Timer_t *timer) {
     timer->motorIndex = -1;
     timer->motorCount = 0;
@@ -55,11 +57,6 @@ PE_Servo180_Status_t PE_Servo180_detachMotor(PE_Servo180_Timer_t *timer, PE_Serv
     }
 
     return PE_Servo180_FAILURE;
-}
-
-float PE_Servo180_mapRange(float value, float srcMin, float srcMax, float dstMin, float dstMax) {
-    float slope = (dstMax - dstMin) / (srcMax - srcMin);
-    return dstMin + slope * (value - srcMin);
 }
 
 void PE_Servo180_setRadian(PE_Servo180_Motor_t *motor, float value) {
@@ -131,6 +128,11 @@ void PE_Servo180_onOverflow(PE_Servo180_Timer_t *timer) {
 
         timer->motorIndex = -1;
     }
+}
+
+float PE_Servo180_mapRange(float value, float srcMin, float srcMax, float dstMin, float dstMax) {
+    float slope = (dstMax - dstMin) / (srcMax - srcMin);
+    return dstMin + slope * (value - srcMin);
 }
 
 __attribute__((weak))
