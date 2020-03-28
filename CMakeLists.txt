@@ -47,7 +47,7 @@ add_custom_target(
 
 add_custom_target(
     PLATFORMIO_TEST ALL
-    COMMAND ${PLATFORMIO_CMD} -f -c clion test -v "$<$<NOT:$<CONFIG:All>>:-e${CMAKE_BUILD_TYPE}>"
+    COMMAND ${PLATFORMIO_CMD} -f -c clion test "$<$<NOT:$<CONFIG:All>>:-e${CMAKE_BUILD_TYPE}>"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
